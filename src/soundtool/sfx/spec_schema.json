@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SFX 소리 스펙",
+  "type": "object",
+  "required": ["sounds"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "minimum": 1, "maximum": 1 },
+    "sounds": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "required": ["name", "preset", "seed"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z0-9_]{2,32}$" },
+          "preset": {
+            "type": "string",
+            "enum": ["coin", "laser", "explosion", "powerup", "hit", "jump", "blip"]
+          },
+          "seed": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+          "tags": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "items": { "type": "string", "pattern": "^[a-z0-9_]{2,24}$" }
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "wave_type": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "attack_time": { "type": "number", "minimum": 0, "maximum": 1 },
+              "sustain_time": { "type": "number", "minimum": 0, "maximum": 1 },
+              "sustain_punch": { "type": "number", "minimum": 0, "maximum": 1 },
+              "decay_time": { "type": "number", "minimum": 0, "maximum": 1 },
+              "start_frequency": { "type": "number", "minimum": 0, "maximum": 1 },
+              "min_frequency": { "type": "number", "minimum": 0, "maximum": 1 },
+              "slide": { "type": "number", "minimum": -1, "maximum": 1 },
+              "delta_slide": { "type": "number", "minimum": -1, "maximum": 1 },
+              "vibrato_depth": { "type": "number", "minimum": 0, "maximum": 1 },
+              "vibrato_speed": { "type": "number", "minimum": 0, "maximum": 1 },
+              "change_amount": { "type": "number", "minimum": -1, "maximum": 1 },
+              "change_speed": { "type": "number", "minimum": 0, "maximum": 1 },
+              "square_duty": { "type": "number", "minimum": 0, "maximum": 1 },
+              "duty_sweep": { "type": "number", "minimum": -1, "maximum": 1 },
+              "repeat_speed": { "type": "number", "minimum": 0, "maximum": 1 },
+              "phaser_offset": { "type": "number", "minimum": -1, "maximum": 1 },
+              "phaser_sweep": { "type": "number", "minimum": -1, "maximum": 1 },
+              "lpf_cutoff": { "type": "number", "minimum": 0, "maximum": 1 },
+              "lpf_cutoff_sweep": { "type": "number", "minimum": -1, "maximum": 1 },
+              "lpf_resonance": { "type": "number", "minimum": 0, "maximum": 1 },
+              "hpf_cutoff": { "type": "number", "minimum": 0, "maximum": 1 },
+              "hpf_cutoff_sweep": { "type": "number", "minimum": -1, "maximum": 1 }
+            }
+          },
+          "check": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "min_seconds": { "type": "number", "minimum": 0, "maximum": 10 },
+              "max_seconds": { "type": "number", "minimum": 0, "maximum": 10 },
+              "centroid_hz": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": { "type": "number", "minimum": 0, "maximum": 22050 }
+              },
+              "skip": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 7,
+                "items": {
+                  "type": "string",
+                  "enum": ["frames", "rms", "peak", "clip", "lead", "dc", "centroid"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

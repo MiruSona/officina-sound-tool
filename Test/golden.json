@@ -1,0 +1,170 @@
+{
+  "presets": {
+    "blip": {
+      "1": {
+        "centroid_hz": 5700.2,
+        "expected_frames": 1185,
+        "frames": 1188,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -4.798
+      },
+      "2": {
+        "centroid_hz": 4762.1,
+        "expected_frames": 3983,
+        "frames": 3986,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -6.002
+      },
+      "3": {
+        "centroid_hz": 3938.2,
+        "expected_frames": 4568,
+        "frames": 4571,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -6.715
+      }
+    },
+    "coin": {
+      "1": {
+        "centroid_hz": 4944.2,
+        "expected_frames": 17161,
+        "frames": 17164,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -9.943
+      },
+      "2": {
+        "centroid_hz": 7340.4,
+        "expected_frames": 2401,
+        "frames": 2404,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -6.278
+      },
+      "3": {
+        "centroid_hz": 5606.2,
+        "expected_frames": 6445,
+        "frames": 6448,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -10.715
+      }
+    },
+    "explosion": {
+      "1": {
+        "centroid_hz": 4909.5,
+        "expected_frames": 9442,
+        "frames": 9445,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -11.776
+      },
+      "2": {
+        "centroid_hz": 9216.5,
+        "expected_frames": 29968,
+        "frames": 29971,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -15.992
+      },
+      "3": {
+        "centroid_hz": 2972.2,
+        "expected_frames": 28582,
+        "frames": 28585,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -12.549
+      }
+    },
+    "hit": {
+      "1": {
+        "centroid_hz": 6438.3,
+        "expected_frames": 6373,
+        "frames": 6376,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -8.842
+      },
+      "2": {
+        "centroid_hz": 4902.9,
+        "expected_frames": 7985,
+        "frames": 7988,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -6.052
+      },
+      "3": {
+        "centroid_hz": 4127.4,
+        "expected_frames": 4896,
+        "frames": 4899,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -5.552
+      }
+    },
+    "jump": {
+      "1": {
+        "centroid_hz": 7978.4,
+        "expected_frames": 7078,
+        "frames": 7081,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -6.202
+      },
+      "2": {
+        "centroid_hz": 6583.8,
+        "expected_frames": 8708,
+        "frames": 8711,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -5.599
+      },
+      "3": {
+        "centroid_hz": 6833.5,
+        "expected_frames": 12973,
+        "frames": 12976,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -3.033
+      }
+    },
+    "laser": {
+      "1": {
+        "centroid_hz": 7735.9,
+        "expected_frames": 6783,
+        "frames": 6786,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -3.121
+      },
+      "2": {
+        "centroid_hz": 4848.3,
+        "expected_frames": 10304,
+        "frames": 10307,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -4.386
+      },
+      "3": {
+        "centroid_hz": 6867.3,
+        "expected_frames": 8231,
+        "frames": 8234,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -3.805
+      }
+    },
+    "powerup": {
+      "1": {
+        "centroid_hz": 6152.9,
+        "expected_frames": 11844,
+        "frames": 11847,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -6.294
+      },
+      "2": {
+        "centroid_hz": 4459.5,
+        "expected_frames": 12160,
+        "frames": 12163,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -5.038
+      },
+      "3": {
+        "centroid_hz": 4826.9,
+        "expected_frames": 1176,
+        "frames": 1179,
+        "peak_dbfs": -1.0,
+        "rms_dbfs": -10.055
+      }
+    }
+  },
+  "seeds": [
+    1,
+    2,
+    3
+  ]
+}

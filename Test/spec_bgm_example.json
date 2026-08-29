@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "songs": [
+    { "name": "town_market", "style": "town", "tags": ["town", "day"], "seed": 1041 },
+    { "name": "boss_1", "style": "battle", "key": "A", "mode": "minor",
+      "bpm": 152, "bars": 32, "seed": 7, "progression": ["i", "VI", "III", "VII"] },
+    { "name": "s_town", "style": "town", "seed": 1, "tags": ["style_probe"] },
+    { "name": "s_battle", "style": "battle", "seed": 1, "tags": ["style_probe"] },
+    { "name": "s_dungeon", "style": "dungeon", "seed": 1, "tags": ["style_probe"] },
+    { "name": "s_title", "style": "title", "seed": 1, "tags": ["style_probe"] },
+    { "name": "s_victory", "style": "victory", "seed": 1, "tags": ["style_probe"] },
+    { "name": "s_ambient", "style": "ambient", "seed": 1, "tags": ["style_probe"] }
+  ]
+}

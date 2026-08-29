@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BGM 곡 스펙",
+  "type": "object",
+  "required": ["songs"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "integer", "minimum": 1, "maximum": 1 },
+    "songs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "required": ["name", "style"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z0-9_-]{1,48}$" },
+          "style": {
+            "type": "string",
+            "enum": ["town", "battle", "dungeon", "title", "victory", "ambient"]
+          },
+          "seed": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+          "tags": {
+            "type": "array",
+            "maxItems": 8,
+            "items": { "type": "string", "pattern": "^[a-z0-9_]{2,24}$" }
+          },
+          "bpm": { "type": "integer", "minimum": 40, "maximum": 240 },
+          "key": {
+            "type": "string",
+            "enum": ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["major", "minor", "dorian", "mixolydian", "phrygian"]
+          },
+          "bars": { "type": "integer", "minimum": 4, "maximum": 64, "multipleOf": 4 },
+          "loop": { "type": "boolean" },
+          "progression": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 8,
+            "items": {
+              "type": "string",
+              "enum": ["I", "ii", "iii", "IV", "V", "vi",
+                       "i", "III", "iv", "v", "VI", "VII", "bII", "bVII"]
+            }
+          },
+          "tracks": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "drums": { "$ref": "#/$defs/track" },
+              "bass": { "$ref": "#/$defs/track" },
+              "chords": { "$ref": "#/$defs/track" },
+              "melody": { "$ref": "#/$defs/track" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "track": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "on": { "type": "boolean" },
+        "program": { "type": "integer", "minimum": 0, "maximum": 127 },
+        "octave": { "type": "integer", "minimum": -2, "maximum": 2 }
+      }
+    }
+  }
+}

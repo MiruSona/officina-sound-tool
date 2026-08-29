@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "sounds": [
+    { "name": "ui_click", "preset": "blip", "seed": 1001, "tags": ["ui", "click"] },
+    { "name": "coin_pickup", "preset": "coin", "seed": 2002, "tags": ["item", "pickup"] },
+    { "name": "boss_boom", "preset": "explosion", "seed": 3003, "tags": ["boss", "impact"],
+      "params": { "decay_time": 0.9, "lpf_cutoff": 0.7 },
+      "check": { "max_seconds": 1.5 } }
+  ]
+}
