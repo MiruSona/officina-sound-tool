@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "soundtool"
+version = "1.0.0"
+description = "짧은 JSON 을 받아 게임용 효과음(SFX)·배경음(BGM) WAV 를 굽고 코드가 검수하는 명령줄 툴"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "mido",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+soundtool = "soundtool.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+soundtool = ["**/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["Test"]

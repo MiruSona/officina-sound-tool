@@ -5,7 +5,7 @@ from pathlib import Path
 # src/soundtool/config.py -> SoundTool/
 TOOL_ROOT = Path(__file__).resolve().parent.parent.parent
 
-RFXGEN_PATH = TOOL_ROOT / "bin" / "rfxgen.exe"
+RFXGEN_PATH = TOOL_ROOT / "external" / "rfxgen.exe"
 RFXGEN_ENV = "SOUNDTOOL_RFXGEN"
 RFXGEN_URL = "https://github.com/raysan5/rfxgen/releases"
 
@@ -23,8 +23,8 @@ EXIT_USAGE = 2
 EXIT_NO_RFXGEN = 3
 
 # BGM 갈래
-FLUIDSYNTH_PATH = TOOL_ROOT / "bin" / "fluidsynth" / "bin" / "fluidsynth.exe"
-SOUNDFONT_PATH = TOOL_ROOT / "bin" / "soundfont" / "GeneralUser-GS.sf2"
+FLUIDSYNTH_PATH = TOOL_ROOT / "external" / "fluidsynth" / "bin" / "fluidsynth.exe"
+SOUNDFONT_PATH = TOOL_ROOT / "external" / "soundfont" / "GeneralUser-GS.sf2"
 FLUIDSYNTH_GAIN = 1.35   # 스타일 6개를 1.2·1.35·1.5 로 구워 재고 고른 값 (피크 대부분 -3~-1 dBFS)
 BGM_SAMPLE_RATE = 44100
 BGM_CHANNELS = 2

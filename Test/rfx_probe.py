@@ -11,7 +11,7 @@ import wave
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-RFXGEN = HERE.parent / "bin" / "rfxgen.exe"
+RFXGEN = HERE.parent / "external" / "rfxgen.exe"
 
 SAMPLE_RATE = 44100  # rfxgen 생성 샘플레이트 고정값
 

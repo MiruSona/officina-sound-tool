@@ -9,19 +9,23 @@ SFX 는 rfxgen, BGM 은 mido → FluidSynth → GeneralUser GS 로 굽는다.
 ## 설치
 
 ```powershell
-py -3.14 -m venv SoundTool/.venv
-SoundTool/.venv/Scripts/python -m pip install -r SoundTool/requirements.txt
+py -3.14 -m venv .venv
+.venv/Scripts/python -m pip install -e ".[test]"
 ```
 
-`numpy` · `mido` 는 **BGM 갈래만** 쓴다. **SFX 갈래는 표준 라이브러리만으로 돈다.**
+의존성은 `pyproject.toml` 에 있다. `numpy` · `mido` 는 **BGM 갈래만** 쓴다.
+**SFX 갈래는 표준 라이브러리만으로 돈다.** `pytest` 는 `[test]` 옵션으로 딸려 온다.
 
-바깥 프로그램 셋은 `bin/` 에 둔다. **`bin/` 은 git 에서 뺀다** (용량·라이선스). 아래 자리에 그대로 놓으면 툴이 알아서 찾는다.
+스튜디오(Officina) 저장소에 서브모듈로 물린 상태라면 앞에 `SoundTool/` 을 붙인다 —
+`py -3.14 -m venv SoundTool/.venv` · `SoundTool/.venv/Scripts/python -m pip install -e "SoundTool[test]"`.
+
+바깥 프로그램 셋은 `external/` 에 둔다. **`external/` 은 git 에서 뺀다** (용량·라이선스). 아래 자리에 그대로 놓으면 툴이 알아서 찾는다.
 
 | 자리 | 무엇 | 받는 곳 |
 | --- | --- | --- |
-| `bin/rfxgen.exe` | rfxgen v5.0 Windows x64 | <https://github.com/raysan5/rfxgen/releases> |
-| `bin/fluidsynth/bin/fluidsynth.exe` | FluidSynth 2.6.0 zip 을 통째로 푼 것 | <https://github.com/FluidSynth/fluidsynth/releases> |
-| `bin/soundfont/GeneralUser-GS.sf2` | GeneralUser GS 2.0.3 | <https://github.com/mrbumpy409/GeneralUser-GS> |
+| `external/rfxgen.exe` | rfxgen v5.0 Windows x64 | <https://github.com/raysan5/rfxgen/releases> |
+| `external/fluidsynth/bin/fluidsynth.exe` | FluidSynth 2.6.0 zip 을 통째로 푼 것 | <https://github.com/FluidSynth/fluidsynth/releases> |
+| `external/soundfont/GeneralUser-GS.sf2` | GeneralUser GS 2.0.3 | <https://github.com/mrbumpy409/GeneralUser-GS> |
 
 `--rfxgen` · `--fluidsynth` · `--soundfont` 로 다른 경로를 줄 수도 있다.
 **라이선스와 받은 파일의 크기·SHA-256 은 `THIRD-PARTY.md` 에 있다.** 새로 받으면 그것과 맞는지 본다.
@@ -29,10 +33,11 @@ SoundTool/.venv/Scripts/python -m pip install -r SoundTool/requirements.txt
 ## 쓰는 법
 
 ```powershell
-$env:PYTHONPATH = "SoundTool/src"
-SoundTool/.venv/Scripts/python -m soundtool sfx make SoundTool/Test/spec_example.json --out Out/sfx
-SoundTool/.venv/Scripts/python -m soundtool bgm make SoundTool/Test/spec_bgm_example.json --out Out/bgm
+.venv/Scripts/python -m soundtool sfx make Test/spec_example.json --out Out/sfx
+.venv/Scripts/python -m soundtool bgm make Test/spec_bgm_example.json --out Out/bgm
 ```
+
+`-e` 로 깔면 `PYTHONPATH` 를 안 잡아도 된다. 안 깔고 쓰려면 `$env:PYTHONPATH = "src"` 를 먼저 준다.
 
 | 명령 | 하는 일 |
 | --- | --- |
@@ -60,10 +65,10 @@ SoundTool/.venv/Scripts/python -m soundtool bgm make SoundTool/Test/spec_bgm_exa
 ## 시험
 
 ```powershell
-SoundTool/.venv/Scripts/python -m pytest SoundTool/Test -q
+.venv/Scripts/python -m pytest Test -q
 ```
 
-`bin/` 이 없으면 바깥 프로그램이 필요한 시험은 건너뛴다. 나머지는 어디서나 돈다.
+`external/` 이 없으면 바깥 프로그램이 필요한 시험은 건너뛴다. 나머지는 어디서나 돈다.
 
 ## 폴더 지도
 
@@ -73,7 +78,7 @@ SoundTool/.venv/Scripts/python -m pytest SoundTool/Test -q
 | `src/soundtool/sfx/` | `rfx.py` `.rfx` 패킹 · `presets.py` · `spec.py` · `make.py` rfxgen 호출 · `dsp.py` FFT · `check.py` 검수 |
 | `src/soundtool/bgm/` | `theory.py` 음계·화음 · `patterns.py` 스타일 · `compose.py` MIDI · `render.py` FluidSynth 호출 · `check.py` 검수 |
 | `Test/` | pytest 248개 · 스펙 예시 · 골든 값 표(`golden.json` `golden_bgm.json`) |
-| `bin/` | 바깥 프로그램. git 제외 |
+| `external/` | 바깥 프로그램. git 제외 |
 | `Docs/` | 조사 · 설계 · 할 일 |
 
 ## 문서
