@@ -143,10 +143,10 @@ def make_one(sound, out_dir, rfxgen, keep_failed=False):
         staged = Path(tmp) / f"{result.name}.wav"
         try:
             burn(rfx_bytes, staged, rfxgen)
-        except RuntimeError as err:
-            result.reasons = [str(err)]
-            return result
-        _finish(result, sound, staged, out_dir, keep_failed)
+            _finish(result, sound, staged, out_dir, keep_failed)
+        except (RuntimeError, OSError, wave.Error, EOFError, ValueError) as err:
+            result.ok = False
+            result.reasons = [str(err) if str(err) else err.__class__.__name__]
     return result
 
 

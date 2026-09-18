@@ -264,7 +264,7 @@ def make_melody(preset, rng, slots, song):
                 continue
             previous, leap_used = _next_pitch(rng, scale, previous, low, high, leap_used)
             notes.append(Note("melody", start, length, previous, jitter(rng, "melody")))
-    _resolve_ending(notes, slots, song, low, high)
+    resolve_ending(preset, notes, song)
     return notes
 
 
@@ -302,11 +302,16 @@ def _next_pitch(rng, scale, previous, low, high, leap_used):
     return rng.choice(candidates), leap_used or leap
 
 
-def _resolve_ending(notes, slots, song, low, high):
-    """규칙 5 — 마지막 음은 으뜸화음의 화음음. loop 이면 1도나 5도."""
-    if not notes:
+def resolve_ending(preset, notes, song, shift=0):
+    """규칙 5 — 마지막 음은 으뜸화음의 화음음. loop 이면 1도나 5도.
+
+    루프 여백으로 마지막 음을 버린 뒤에도 맞아야 하므로 다듬기가 끝난 뒤 한 번 더 부른다.
+    """
+    low = max(PITCH_LOW, preset.melody_range[0] + shift)
+    high = min(PITCH_HIGH, preset.melody_range[1] + shift)
+    if not notes or low > high:
         return
-    tonic = slots[0].pitches
+    tonic = theory.tonic_pitches(song.key, song.mode)
     wanted = (tonic[0], tonic[2]) if song.loop else tonic
     last = notes[-1]
     best = None

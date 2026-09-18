@@ -3,6 +3,7 @@
 import math
 import struct
 import wave
+from pathlib import Path
 
 import pytest
 
@@ -45,3 +46,15 @@ def test_normalize_silence_keeps_gain_one(tmp_path):
     path = write_sine_wav(tmp_path / "silence.wav", amp=0.0)
     gain = make.normalize(path, -1.0)
     assert gain == 1.0
+
+
+def test_make_one_reports_a_broken_wav_instead_of_raising(tmp_path, monkeypatch):
+    """구운 WAV 가 깨졌어도 예외를 안 던지고 실패로 돌아온다 (나머지 소리는 계속 굽는다)."""
+    def fake_burn(rfx_bytes, wav_path, rfxgen):
+        Path(wav_path).write_bytes(b"")
+
+    monkeypatch.setattr(make, "burn", fake_burn)
+    result = make.make_one({"name": "a", "preset": "coin", "seed": 1},
+                           tmp_path / "out", tmp_path / "rfxgen.exe")
+    assert result.ok is False
+    assert result.reasons

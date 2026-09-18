@@ -137,3 +137,33 @@ def test_song_from_manifest_round_trip():
     assert song.tracks["bass"].on is True
     assert song.tracks["drums"].on is False
     assert song.seconds == pytest.approx(8.0)
+
+
+def test_check_with_broken_manifest_json(tmp_path, capsys):
+    (tmp_path / config.MANIFEST_NAME).write_text("{ 깨진 json", encoding="utf-8")
+    assert cli.main(["bgm", "check", str(tmp_path)]) == config.EXIT_FAIL
+    assert "manifest" in capsys.readouterr().out
+
+
+def test_check_with_missing_manifest_keys_fails_gracefully(tmp_path, capsys):
+    """manifest 줄에 키가 빠져도 트레이스백 대신 실패 줄이 나온다."""
+    row = {"name": "a", "file": "a.wav", "kind": "bgm", "tags": [], "seconds": 8.0, "seed": 1}
+    (tmp_path / config.MANIFEST_NAME).write_text(
+        json.dumps({"version": 1, "kinds": {}, "items": [row]}), encoding="utf-8")
+    assert cli.main(["bgm", "check", str(tmp_path)]) == config.EXIT_FAIL
+    assert "실패" in capsys.readouterr().out
+
+
+def test_render_reports_a_dead_fluidsynth_instead_of_crashing(tmp_path, monkeypatch):
+    """fluidsynth 를 못 돌려도 예외가 아니라 실패 이유로 돌아온다."""
+    from soundtool.bgm import spec as spec_mod
+
+    def boom(*args, **kwargs):
+        raise FileNotFoundError(2, "그런 파일이 없다")
+
+    monkeypatch.setattr(render_mod.subprocess, "run", boom)
+    song = spec_mod.build_song({"name": "a", "style": "town", "seed": 1, "bars": 4})
+    tools = render_mod.ToolPaths(tmp_path / "fluidsynth.exe", tmp_path / "gs.sf2")
+    result = render_mod.render(tmp_path / "a.mid", tmp_path / "a.wav", song, tools)
+    assert result.ok is False
+    assert "fluidsynth" in result.reasons[0]

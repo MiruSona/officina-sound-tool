@@ -29,12 +29,17 @@ def plan_chords(song):
     """진행을 마디에 깐다. 박 하나에 슬롯 하나를 준다 (설계 3-1).
 
     진행 하나가 4마디 악구를 채운다. 길이가 4면 마디마다, 2면 두 마디씩, 8이면 반 마디씩이다.
+    길이가 4 이하면 마디 경계에서만 코드를 바꾼다. 안 그러면 온마디 셀이 가운데 코드를 못 친다.
     """
     romans = song.progression
     slots = []
     for beat in range(song.beats):
         inside = beat % BEATS_PER_PHRASE
-        index = min(len(romans) - 1, int(inside * len(romans) / BEATS_PER_PHRASE))
+        if len(romans) <= patterns.BARS_PER_PHRASE:
+            bar = inside // patterns.BEATS_PER_BAR
+            index = min(len(romans) - 1, int(bar * len(romans) / patterns.BARS_PER_PHRASE))
+        else:
+            index = min(len(romans) - 1, int(inside * len(romans) / BEATS_PER_PHRASE))
         roman = romans[index]
         slots.append(ChordSlot(roman, theory.chord_pitches(roman, song.key)))
     return slots
@@ -56,6 +61,9 @@ def make_notes(song):
                                               slots, song)
     for role, notes in made.items():
         made[role] = _finish_notes(song, role, notes)
+    if made.get("melody"):
+        # 루프 여백으로 마지막 음을 버렸을 수 있어 규칙 5 를 여기서 한 번 더 건다.
+        patterns.resolve_ending(preset, made["melody"], song, song.tracks["melody"].octave * 12)
     return made
 
 

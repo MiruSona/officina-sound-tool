@@ -3,7 +3,7 @@
 **짧은 JSON 을 받아 게임용 효과음(SFX)과 배경음(BGM) WAV 를 굽고, 코드가 검수해서 통과한 것만 내보내는 명령줄 툴이다.**
 SFX 는 rfxgen, BGM 은 mido → FluidSynth → GeneralUser GS 로 굽는다.
 
-**상태 : 구현 끝 (2026-08-25) · 시험 248개 통과 · 소리는 아직 사람이 안 들어 봤다.**
+**상태 : 구현 끝 (2026-08-25) · 시험 273개 통과 · 소리는 아직 사람이 안 들어 봤다.**
 문턱은 전부 실측으로 잡았지만, 「좋은 소리인가」는 사람 귀가 판정해야 한다. 남은 일은 `Docs/Todo/사운드툴.md`.
 
 ## 설치
@@ -77,7 +77,7 @@ py -3.14 -m venv .venv
 | `src/soundtool/` | `cli.py` 갈래 가르기 · `config.py` 상수 · `manifest.py` · `schema.py` 스키마 검사기 · `table.py` 표 찍기 |
 | `src/soundtool/sfx/` | `rfx.py` `.rfx` 패킹 · `presets.py` · `spec.py` · `make.py` rfxgen 호출 · `dsp.py` FFT · `check.py` 검수 |
 | `src/soundtool/bgm/` | `theory.py` 음계·화음 · `patterns.py` 스타일 · `compose.py` MIDI · `render.py` FluidSynth 호출 · `check.py` 검수 |
-| `Test/` | pytest 248개 · 스펙 예시 · 골든 값 표(`golden.json` `golden_bgm.json`) |
+| `Test/` | pytest 273개 · 스펙 예시 · 골든 값 표(`golden.json` `golden_bgm.json`) |
 | `external/` | 바깥 프로그램. git 제외 |
 | `Docs/` | 조사 · 설계 · 할 일 |
 

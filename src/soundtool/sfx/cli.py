@@ -148,9 +148,10 @@ def run_check(args):
     for path in paths:
         try:
             metrics = check_mod.measure(path)
-        except (ValueError, wave.Error) as err:
+        except (ValueError, wave.Error, EOFError, OSError) as err:
             bad += 1
-            rows.append((path.stem, "-", "-", "-", "-", "-", f"실패 · {err}"))
+            reason = str(err) if str(err) else "WAV 를 못 읽었다 (빈 파일이거나 깨졌다)"
+            rows.append((path.stem, "-", "-", "-", "-", "-", f"실패 · {reason}"))
             continue
         reasons = _compare(path.stem, metrics, expected)
         if reasons:

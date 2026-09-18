@@ -53,6 +53,12 @@ def scale_pitches(key, mode):
     return [(root + step) % 12 for step in MODE_STEPS[mode]]
 
 
+def tonic_pitches(key, mode):
+    """으뜸화음 세 음의 반음 번호. 음계의 1·3·5도다."""
+    scale = scale_pitches(key, mode)
+    return [scale[0], scale[2], scale[4]]
+
+
 def chord_root(roman, key):
     if roman not in ROMANS:
         raise ValueError(f"모르는 로마숫자 : {roman}")

@@ -8,7 +8,7 @@ import pytest
 
 from soundtool.bgm import check as check_mod
 from soundtool.bgm import compose as compose_mod
-from soundtool.bgm import patterns, spec as spec_mod
+from soundtool.bgm import patterns, spec as spec_mod, theory
 
 HERE = Path(__file__).resolve().parent
 GOLDEN = json.loads((HERE / "golden_bgm.json").read_text(encoding="utf-8"))
@@ -109,3 +109,35 @@ def test_golden_midi_hash(style, tmp_path):
     """패턴을 건드리면 이 시험이 먼저 깨진다."""
     data = save(song_of(style), tmp_path).read_bytes()
     assert hashlib.sha256(data).hexdigest() == GOLDEN["styles"][style]
+
+
+def _tonic_classes(song):
+    scale = theory.scale_pitches(song.key, song.mode)
+    if song.loop:
+        return {scale[0], scale[4]}
+    return {scale[0], scale[2], scale[4]}
+
+
+@pytest.mark.parametrize("style", patterns.STYLE_NAMES)
+@pytest.mark.parametrize("seed", (1, 2, 7))
+def test_last_melody_note_is_a_tonic_tone(style, seed):
+    """규칙 5 — 루프 여백으로 마지막 음을 버린 뒤에도 으뜸화음으로 끝난다."""
+    song = song_of(style, seed=seed)
+    notes = compose_mod.make_notes(song)["melody"]
+    assert notes[-1].pitch % 12 in _tonic_classes(song)
+
+
+def test_ending_follows_the_key_not_the_first_chord():
+    """으뜸화음은 진행 첫 화음이 아니라 조의 으뜸화음이다 (규칙 5)."""
+    song = song_of("town", progression=["vi", "IV", "I", "V"])
+    notes = compose_mod.make_notes(song)["melody"]
+    assert notes[-1].pitch % 12 in _tonic_classes(song)
+
+
+def test_short_progression_changes_chords_on_bar_lines():
+    """진행 길이가 3 이면 마디 가운데서 코드가 바뀌면 안 된다 (온마디 셀이 못 친다)."""
+    song = song_of("town", progression=["I", "V", "vi"])
+    slots = compose_mod.plan_chords(song)
+    for beat, slot in enumerate(slots):
+        bar_start = beat - beat % patterns.BEATS_PER_BAR
+        assert slot.roman == slots[bar_start].roman

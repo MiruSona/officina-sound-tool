@@ -234,3 +234,13 @@ def test_golden_values(tmp_path, capsys):
             slack = EXPLOSION_TOLERANCE if preset == "explosion" else CENTROID_TOLERANCE
             assert got["centroid_hz"] == pytest.approx(want["centroid_hz"], rel=slack), \
                 f"{preset} {seed} centroid"
+
+
+def test_check_empty_wav_fails_gracefully_instead_of_crashing(tmp_path, capsys):
+    """0 바이트 WAV 하나에 트레이스백이 아니라 실패 줄이 나와야 한다."""
+    (tmp_path / "empty.wav").write_bytes(b"")
+    write_sine_wav(tmp_path / "ok.wav")
+    code = cli.main(["sfx", "check", str(tmp_path)])
+    out = capsys.readouterr().out
+    assert code == config.EXIT_FAIL
+    assert "실패" in out and "통과" in out

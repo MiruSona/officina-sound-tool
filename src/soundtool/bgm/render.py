@@ -77,6 +77,8 @@ def burn(mid_path, wav_path, tools, gain, rate, reverb_off):
                               shell=False, timeout=TIMEOUT_SECONDS)
     except subprocess.TimeoutExpired as err:
         raise RuntimeError(f"fluidsynth 가 {TIMEOUT_SECONDS}초를 넘겼다") from err
+    except OSError as err:
+        raise RuntimeError(f"fluidsynth 를 못 돌렸다 : {err}") from err
     if proc.returncode != 0:
         tail = (proc.stderr or proc.stdout or "")[:STDERR_HEAD]
         raise RuntimeError(f"fluidsynth exit {proc.returncode} — {tail}")
@@ -108,10 +110,10 @@ def render(mid_path, wav_path, song, tools, gain=None, rate=None):
         try:
             burn(mid_path, wav_path, tools, result.gain, rate, song.loop)
             trim(wav_path, expected_frames(song, rate))
-        except RuntimeError as err:
-            result.reasons = [str(err)]
+            result.metrics = check_mod.measure(wav_path, check_mod.tail_skip_seconds(song))
+        except (RuntimeError, OSError, wave.Error, EOFError) as err:
+            result.reasons = [str(err) if str(err) else err.__class__.__name__]
             return result
-        result.metrics = check_mod.measure(wav_path, check_mod.tail_skip_seconds(song))
         if not _clipped(result.metrics) or attempt == 1:
             break
         result.gain = round(result.gain * RETRY_GAIN_RATIO, 3)

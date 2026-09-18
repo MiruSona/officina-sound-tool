@@ -1,6 +1,7 @@
 """BGM 갈래의 명령 세 개 — make · check · presets."""
 
 import json
+import wave
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -157,7 +158,12 @@ def run_check(args):
     if not path.is_file():
         print(f"manifest 를 못 찾았다 : {path}")
         return config.EXIT_FAIL
-    rows_in = [r for r in manifest_mod.read(path).get("items", []) if r.get("kind") == KIND]
+    try:
+        data = manifest_mod.read(path)
+    except (json.JSONDecodeError, OSError, ValueError) as err:
+        print(f"manifest 를 못 읽었다 : {path} ({err})")
+        return config.EXIT_FAIL
+    rows_in = [r for r in data.get("items", []) if r.get("kind") == KIND]
     if not rows_in:
         print(f"manifest 에 bgm 항목이 없다 : {path}")
         return config.EXIT_FAIL
@@ -165,11 +171,18 @@ def run_check(args):
     rows = [("이름", "초", "피크dBFS", "RMS dBFS", "저/중/고 %", "결과")]
     bad = 0
     for row in rows_in:
-        reasons, metrics = _recheck(Path(args.target), row)
+        try:
+            reasons, metrics = _recheck(Path(args.target), row)
+        except (KeyError, TypeError, ValueError, wave.Error, EOFError, OSError) as err:
+            bad += 1
+            reason = str(err) if str(err) else err.__class__.__name__
+            rows.append((row.get("name", "?"), "-", "-", "-", "-",
+                         f"실패 · manifest 가 이상하다 ({reason})"))
+            continue
         if reasons:
             bad += 1
         rows.append((
-            row["name"],
+            row.get("name", "?"),
             f"{metrics.seconds:.2f}" if metrics else "-",
             f"{metrics.peak_dbfs:.1f}" if metrics else "-",
             f"{metrics.rms_dbfs:.1f}" if metrics else "-",
