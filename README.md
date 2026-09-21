@@ -9,6 +9,17 @@ SFX 는 rfxgen, BGM 은 mido → FluidSynth → GeneralUser GS 로 굽는다.
 ## 설치
 
 ```powershell
+powershell -NoProfile -File <경로>\SoundTool\setup.ps1
+```
+
+**받은 직후와 서브모듈을 갱신한 뒤마다 한 번씩 돌린다.** `.venv` 는 git 에 안 올라가서,
+소스만 새것이고 깔린 판은 옛것으로 남는다. 스크립트는 `.venv` 를 만들고(없으면) 다시 깔고
+`python -m soundtool --help` 로 연기 시험까지 한다. `external/` 의 바깥 프로그램이 없으면
+알려만 주고 넘어간다 — 자동으로 받지 않는다.
+
+손으로 해도 된다.
+
+```powershell
 py -3.14 -m venv .venv
 .venv/Scripts/python -m pip install -e ".[test]"
 ```
